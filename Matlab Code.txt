@@ -1,0 +1,30 @@
+Kp = 0.12;
+Ki = 0.1;
+Kd = 0.02;
+
+numerator = 800;
+denominator = [1, 15.8, 62, 40];
+sys = tf(numerator, denominator);
+
+C = pid(Kp, Ki, Kd);
+
+sys_cl = feedback(C * sys, 1);
+
+step_response_cl = stepinfo(sys_cl);
+
+disp('PID Controller Gains:');
+disp(['Kp: ', num2str(Kp)]);
+disp(['Ki: ', num2str(Ki)]);
+disp(['Kd: ', num2str(Kd)]);
+
+
+disp('Closed-Loop Response Characteristics:');
+disp(['Rise Time: ', num2str(step_response_cl.RiseTime), ' seconds']);
+disp(['Overshoot: ', num2str(step_response_cl.Overshoot), ' %']);
+disp(['Settling Time: ', num2str(step_response_cl.SettlingTime), ' seconds']);
+
+subplot(1,1,1);
+step(sys_cl);
+title('Step Response of Closed-Loop System');
+xlabel('Time (s)');
+ylabel('Amplitude');
